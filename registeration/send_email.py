@@ -15,7 +15,7 @@ password = "ckmrbvysgxynbvud"
 # Create a secure SSL context
 context = ssl.create_default_context()
 
-subject = "Wecome to Compass!"
+subject = "Welcome to Compass!"
 
 sender_email = "compass.strawhats@gmail.com"
 receiver_email = "nakul1010@gmail.com"
@@ -29,7 +29,11 @@ msgText = MIMEText('This is the alternative plain text message.')
 msgAlternative.attach(msgText)
 
 # We reference the image in the IMG SRC attribute by the ID we give it below
-msgText = MIMEText('<b>Some <i>HTML</i> text</b> and an image.<br><img src="cid:image1"><br>Nifty!', 'html')
+msgText = MIMEText('<img src="https://i.imgur.com/514aUua.jpeg" height="150" width="150">'
+                   '<h1>Welcome to Compass Events</h1>'
+                   'Please scan the below QR code to register for the event.<br><br>'
+                   '<img src="cid:image1"><br><br>'
+                   'Looking forward to seeing you there.', 'html')
 msgAlternative.attach(msgText)
 
 fp = open('basic_qrcode.png', 'rb')
