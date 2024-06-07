@@ -23,7 +23,7 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("registeration/", include('registeration.urls')),
     path('csrf/', views.csrf),
-    path('login/', views.login_view),
+    path('login', views.login_view),
     path('logout/', views.logout_view),
     path('logged_in/', views.is_logged_in),
 ]

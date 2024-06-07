@@ -11,10 +11,9 @@ def csrf(request):
 
 
 def login_view(request):
-    request_body = json.loads(request.body)
-    username = request_body.get('username')
-    password = request_body.get('password')
-    user = authenticate(username=username, password=password)
+    username = request.POST.get('username')
+    password = request.POST.get('password')
+    user = authenticate(request, username=username, password=password)
     if user is not None:
         login(request, user)
         return JsonResponse({"detail": "Success",
