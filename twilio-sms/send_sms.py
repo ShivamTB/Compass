@@ -22,10 +22,3 @@ message = client.messages.create(to=to_number,
                            from_=from_number,
                             status_callback='',
                         body=message_body)
-
-
-
-
-
-
-
