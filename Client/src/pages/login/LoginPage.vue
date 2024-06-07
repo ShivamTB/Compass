@@ -1,25 +1,20 @@
 <template>
-
     <q-card class="q-ma-xl">
         <div class="row">
-            <div class="col-0 col-sm-5 bg-primary rounded-left-borders xs-hide">
+            <div class="col-0 col-sm-5 welcome-bg rounded-left-borders xs-hide">
                 <div class="row full-width q-px-xl q-pb-xl full-height flex flex-center">
                     <div class="">
-                        <div class="text-h4 text-uppercase text-white fredoka" style="min-width: 220px">Welcome!</div>
-                        <div class="text-white q-my-sm text-subtitle1">Please sign in to your account to get started!
+                        <div class="text-h4 text-uppercase text-white fredoka" style="min-width: 220px">Welcome!
+                        </div>
+                        <div class="text-white q-my-sm text-subtitle1">Please sign in to your account to get
+                            started!
                         </div>
                     </div>
                 </div>
             </div>
 
             <div class="col-12 col-sm-7">
-                <div class="row q-ml-sm q-mt-sm sm-and-up-hide">
-                    <div class="col-12 fredoka text-subtitle1">
-                        <router-link class="text-primary" style="text-decoration: none" to="/">
-                            System Name
-                        </router-link>
-                    </div>
-                </div>
+
                 <div class="row q-pa-sm-sm q-pa-md">
                     <div class="col-12">
                         <q-card-section>
@@ -71,3 +66,9 @@ const submit = async () => {
     }
 }
 </script>
+
+<style scoped>
+.welcome-bg {
+    background-color: #b0116b;
+}
+</style>
