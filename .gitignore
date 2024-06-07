@@ -43,6 +43,7 @@ htmlcov/
 .coverage
 .coverage.*
 .cache
+.compass.cnf
 nosetests.xml
 coverage.xml
 *.cover
