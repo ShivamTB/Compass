@@ -29,11 +29,11 @@ msgText = MIMEText('This is the alternative plain text message.')
 msgAlternative.attach(msgText)
 
 # We reference the image in the IMG SRC attribute by the ID we give it below
-msgText = MIMEText('<img src="https://i.imgur.com/514aUua.jpeg" height="150" width="150">'
+msgText = MIMEText('<center><img src="https://i.imgur.com/514aUua.jpeg" height="150" width="150">'
                    '<h1>Welcome to Compass Events</h1>'
                    'Please scan the below QR code to register for the event.<br><br>'
                    '<img src="cid:image1"><br><br>'
-                   'Looking forward to seeing you there.', 'html')
+                   'Looking forward to seeing you there.</center>', 'html')
 msgAlternative.attach(msgText)
 
 fp = open('basic_qrcode.png', 'rb')
