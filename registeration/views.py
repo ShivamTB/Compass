@@ -1,6 +1,7 @@
 from django.contrib.auth.models import User
 from django.http import JsonResponse
 from registeration.models import Referrals
+from registeration.send_email import send_registeration_email
 from django.contrib.auth.decorators import login_required
 
 def new_user(request):
@@ -20,6 +21,7 @@ def new_user(request):
             return JsonResponse({'message': 'Invalid Referral ID'}, status=500)
         if not user:
             return JsonResponse({'message': 'User already exists!'}, status=500)
+        send_registeration_email(user)
         return JsonResponse({'message': 'User Created!'}, status=200)
     except Exception as e:
         print(e)

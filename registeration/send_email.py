@@ -1,54 +1,60 @@
-import email, smtplib, ssl
-import segno
-
-from email import encoders
-from email.mime.base import MIMEBase
+import os
+import smtplib
+import ssl
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from email.mime.image import MIMEImage
+import segno
+from django.conf import settings
 
-qrcode = segno.make_qr("I will be king of the pirates!")
-qrcode.save("basic_qrcode.png", scale=5, border=0)
-port = 465  # For SSL
-password = "ckmrbvysgxynbvud"
 
-# Create a secure SSL context
-context = ssl.create_default_context()
+def send_registeration_email(user):
+    # Creating and Saving QR Code
+    qr_path = os.path.join(settings.BASE_DIR, 'qr_codes')
+    file_path = os.path.join(qr_path, f'{user.id}.png')
+    qrcode = segno.make_qr("I will be king of the pirates!")
+    qrcode.save(file_path, scale=5, border=0)
+    
+    # Writing the Email
+    port = 465  # For SSL
+    password = "ckmrbvysgxynbvud"
 
-subject = "Welcome to Compass!"
+    # Create a secure SSL context
+    context = ssl.create_default_context()
 
-sender_email = "compass.strawhats@gmail.com"
-receiver_email = "nakul1010@gmail.com"
-message = "TEST"
+    subject = f"Welcome to Compass {user.first_name}!"
 
-message = MIMEMultipart()
-msgAlternative = MIMEMultipart('alternative')
-message.attach(msgAlternative)
+    sender_email = "compass.strawhats@gmail.com"
+    receiver_email = user.email
 
-msgText = MIMEText('This is the alternative plain text message.')
-msgAlternative.attach(msgText)
+    message = MIMEMultipart()
+    msgAlternative = MIMEMultipart('alternative')
+    message.attach(msgAlternative)
 
-# We reference the image in the IMG SRC attribute by the ID we give it below
-msgText = MIMEText('<center><img src="https://i.imgur.com/514aUua.jpeg" height="150" width="150">'
-                   '<h1>Welcome to Compass Events</h1>'
-                   'Please scan the below QR code to register for the event.<br><br>'
-                   '<img src="cid:image1"><br><br>'
-                   'Looking forward to seeing you there.</center>', 'html')
-msgAlternative.attach(msgText)
+    msgText = MIMEText('This is the alternative plain text message.')
+    msgAlternative.attach(msgText)
 
-fp = open('basic_qrcode.png', 'rb')
-msgImage = MIMEImage(fp.read())
-fp.close()
+    # We reference the image in the IMG SRC attribute by the ID we give it below
+    msgText = MIMEText('<center><img src="https://i.imgur.com/514aUua.jpeg" height="150" width="150">'
+                       f'<h1>Welcome to Compass Events, {user.first_name}!</h1>'
+                       'Please scan the below QR code at the kiosk for entry.<br><br>'
+                       '<img src="cid:image1"><br><br>'
+                       'Looking forward to seeing you there.</center>', 'html')
+    msgAlternative.attach(msgText)
 
-msgImage.add_header('Content-ID', '<image1>')
-# Create a multipart message and set headers
+    fp = open(file_path, 'rb')
+    msgImage = MIMEImage(fp.read())
+    fp.close()
 
-message["From"] = sender_email
-message["To"] = receiver_email
-message["Subject"] = subject
+    msgImage.add_header('Content-ID', '<image1>')
+    # Create a multipart message and set headers
 
-message.attach(msgImage)
+    message["From"] = sender_email
+    message["To"] = receiver_email
+    message["Subject"] = subject
 
-with smtplib.SMTP_SSL("smtp.gmail.com", port, context=context) as server:
-    server.login("compass.strawhats@gmail.com", password)
-    server.sendmail(sender_email, receiver_email, message.as_string())
+    message.attach(msgImage)
+
+    with smtplib.SMTP_SSL("smtp.gmail.com", port, context=context) as server:
+        server.login("compass.strawhats@gmail.com", password)
+        server.sendmail(sender_email, receiver_email, message.as_string())
