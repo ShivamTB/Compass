@@ -1,46 +1,35 @@
-import json
-from django.shortcuts import render
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.models import User
 from django.http import JsonResponse
-from django.middleware.csrf import get_token as get_csrf_token
+from registeration.models import Referrals
+from django.contrib.auth.decorators import login_required
 
-# Create your views here.
+def new_user(request):
+    try:
+        user = User.objects.create_user(username=request.POST.get('username'),
+                                        email=request.POST.get('email'),
+                                        password=request.POST.get('password'),
+                                        first_name=request.POST.get('first_name'),
+                                        last_name=request.POST.get('last_name')
+                                        )
+        try:
+            referrer = request.POST.get('referral')
+            if referrer != '':
+                referrer = User.objects.get(id=referrer)
+                Referrals.objects.create(user=user, referrer=referrer)
+        except Exception:
+            return JsonResponse({'message': 'Invalid Referral ID'}, status=500)
+        if not user:
+            return JsonResponse({'message': 'User already exists!'}, status=500)
+        return JsonResponse({'message': 'User Created!'}, status=200)
+    except Exception as e:
+        print(e)
+        return JsonResponse({'message': 'Something went wrong!'}, status=500)
 
-def csrf(request):
-    return JsonResponse({'csrfToken': get_csrf_token(request)})
+@login_required
+def get_referral_count(request):
+    count = Referrals.objects.filter(referrer=request.user).count()
+    return JsonResponse({'message': count}, status=200)
 
-
-def login_view(request):
-    request_body = json.loads(request.body)
-    username = request_body.get('username')
-    password = request_body.get('password')
-    user = authenticate(username=username, password=password)
-    if user is not None:
-        login(request, user)
-        return JsonResponse({"detail": "Success",
-                             "status": 200,
-                             'user': f"{user.first_name} {user.last_name}"},
-                            status=200)
-    return JsonResponse({"detail": "Invalid credentials",
-                         "status": 400},
-                        status=400)
-
-
-def logout_view(request):
-    logout(request)
-    return JsonResponse({"detail": "Success", "status": 200}, status=200)
-
-
-def is_logged_in(request):
-    user = request.user
-    first_name = ''
-    last_name = ''
-
-    if user.is_authenticated:
-        first_name = user.first_name
-        last_name = user.last_name
-
-    return JsonResponse({"is_authenticated": user.is_authenticated,
-                         "status": 200,
-                         'user': f"{first_name} {last_name}"
-                         })
+@login_required
+def get_referral_id(request):
+    return JsonResponse({'message': request.user.id}, status=200)
