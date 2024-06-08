@@ -3,6 +3,6 @@ from registeration import views
 
 app_name = 'registeration'
 urlpatterns = [path('new_user', views.new_user),
-               path('get_referral_count', views.get_referral_count),
-               path('get_referral_id', views.get_referral_id),
+               path('get_profile_data', views.get_profile_data),
+               path('add_user_photo', views.add_user_photo)
                ]
