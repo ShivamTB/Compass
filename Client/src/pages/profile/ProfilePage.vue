@@ -11,7 +11,7 @@
                 <div class="user-image column items-center">
                     <q-avatar class="shadow-5 cursor-pointer mavatar" @click="uploadDoc" size="250px">
 
-                        <img v-if="user_details.photo" :src="`${photoBaseUrl}${user_details.photo}`"
+                        <img v-if="profileImage" :src="`${photoBaseUrl}${profileImage}`"
                             style="border:5px solid white;">
                         <img v-else src="https://cdn.quasar.dev/img/boy-avatar.png" style="border:5px solid white;">
                     </q-avatar>
@@ -110,6 +110,8 @@ const file: any = ref(null)
 
 const photos = ref([])
 
+const profileImage = ref(null)
+
 onMounted(() => {
     getUserDetails()
     getPhotos()
@@ -127,6 +129,7 @@ const getUserDetails = async () => {
         count: user.count,
         referral_id: user.referral_id
     }
+    profileImage.value = user.photo
 }
 
 const getPhotos = async (loader = false) => {
@@ -144,12 +147,13 @@ const uploadDoc: any = () => {
 
 const uploadFIle = async (e: any) => {
     const file = e.target.files[0]
-
+    profileImage.value = null
     const formData = new FormData()
     formData.append('photo', file)
     const isUploaded = await addUserPhoto(formData)
     if (isUploaded) {
-        getPhotos()
+        await getUserDetails()
+        await getPhotos()
     }
 
 }
