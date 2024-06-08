@@ -2,7 +2,7 @@ import { RouteRecordRaw } from 'vue-router';
 
 const routes: RouteRecordRaw[] = [
   {
-    path: '/',
+    path: '/dashboard',
     component: () => import('layouts/MainLayout.vue'),
     children: [{ path: '', component: () => import('pages/IndexPage.vue') }],
   },
@@ -10,8 +10,9 @@ const routes: RouteRecordRaw[] = [
     path: '/',
     component: () => import('layouts/OuterLayout.vue'),
     children: [
-      { path: 'register', component: () => import('pages/register/RegisterPage.vue') },
-      { path: 'login', component: () => import('pages/login/LoginPage.vue') }
+      { path: '/', name: 'landing', component: () => import('pages/landing/LandingPage.vue') },
+      { path: 'register', name: 'register', component: () => import('pages/register/RegisterPage.vue') },
+      { path: 'login', name: 'login', component: () => import('pages/login/LoginPage.vue') },
     ],
   },
 
