@@ -16,6 +16,7 @@ const routes: RouteRecordRaw[] = [
     children: [
       { path: '/dashboard', name: 'dashboard', component: () => import('pages/dashboard/DashboardPage.vue') },
       { path: '/profile', name: 'profile', component: () => import('pages/profile/ProfilePage.vue') },
+      { path: '/food', name: 'food', component: () => import('pages/food/FoodApp.vue') },
     ],
   },
 
