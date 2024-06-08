@@ -28,3 +28,17 @@ export const getUserPhotos = async () => {
         return false;
     });
 }
+
+
+export const addUserPhoto = async (form: any) => {
+    return await api.post('/registeration/add_user_photo', form).then((response) => {
+        if (response.status == 200) {
+            return true
+        }
+        return false
+    }
+    ).catch((error) => {
+        console.log(error)
+        return false
+    })
+}

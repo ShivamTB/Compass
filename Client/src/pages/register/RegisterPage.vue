@@ -27,7 +27,7 @@
                                 <q-input v-model="user.last_name" label="Last Name" name="Last Name" />
                                 <q-input v-model="user.email" label="Email" name="Email" />
                                 <q-input v-model="user.password" label="Password" name="password" type="password" />
-                                <q-input v-model="user.referral" label="Referral" name="Referral" />
+                                <q-input v-model="user.referral" label="Referral" name="Referral" prefix="R-" />
                                 <div>
                                     <q-btn class="full-width fredoka" color="primary" label="Register" rounded
                                         type="submit"></q-btn>
@@ -51,14 +51,18 @@
 import { registerUser } from 'src/services/auth.service';
 import { notifySuccess } from 'src/utils/notify';
 import { ref } from 'vue'
+import { useRouter } from 'vue-router';
+
+
+const router = useRouter()
 
 const user = ref({
-    username: 'shafeequeom',
-    last_name: 'shafeeq',
-    first_name: 'OM',
-    email: 'shafeequeom7@gmail.com',
-    password: 'som@123',
-    referral: '11'
+    username: null,
+    last_name: null,
+    first_name: null,
+    email: null,
+    password: null,
+    referral: null
 })
 
 // const form = ref({})
@@ -67,6 +71,7 @@ const submit = async () => {
     const isRegistered = await registerUser(user.value);
     if (isRegistered) {
         notifySuccess('User registered successfully');
+        router.push({ path: '/login' })
     }
 }
 </script>
