@@ -59,7 +59,16 @@
 
                 </q-card-section>
                 <q-separator />
-                <div class="q-mt-lg q-pa-sm" v-if="photos?.length">
+                <div class="flex justify-center" style="margin-top:-20px;" @click="getPhotos(true)">
+                    <q-btn icon="refresh" flat round></q-btn>
+                </div>
+
+                <div class="row q-col-gutter-md" v-if="loading">
+                    <div class="col-4" v-for="photo in 3" :key="photo">
+                        <q-skeleton height="200px" square />
+                    </div>
+                </div>
+                <div class="q-mt-lg q-pa-sm" v-if="photos?.length && !loading">
                     <div class="row q-col-gutter-md">
                         <div class="col-4" v-for="photo in photos" :key="photo">
                             <q-img :src="`${photoBaseUrl}${photo}`" :ratio="16 / 9" />
@@ -75,9 +84,12 @@
 <script setup lang="ts">
 import { addUserPhoto, getUserPhotos, getUserProfile } from 'src/services/user.service';
 import { onMounted, ref } from 'vue';
+import { useQuasar } from 'quasar'
 
 const photoBaseUrl = 'http://192.168.101.195:8000/registeration/'
 
+
+const $q = useQuasar()
 
 const user_details = ref({
     user_name: null,
@@ -90,7 +102,9 @@ const user_details = ref({
 
 })
 
-// const hoverFlag = ref(false)
+
+
+const loading = ref(false)
 
 const file: any = ref(null)
 
@@ -115,14 +129,17 @@ const getUserDetails = async () => {
     }
 }
 
-const getPhotos = async () => {
+const getPhotos = async (loader = false) => {
+    loading.value = true
+    if (loader) $q.loading.show()
     const pts = await getUserPhotos()
+    if (loader) $q.loading.hide()
+    loading.value = false
     photos.value = pts
 }
 
 const uploadDoc: any = () => {
-    console.log(file?.value?.click?.());
-
+    file?.value?.click?.()
 }
 
 const uploadFIle = async (e: any) => {

@@ -5,8 +5,10 @@
         <q-toolbar-title>
           Compass
         </q-toolbar-title>
-        <q-btn flat dense icon="sim_card" class="q-mr-xs" label="Market Place" />
-        <q-btn flat dense icon="restaurant" label="Order Food" />
+        <!-- <q-btn flat dense icon="sim_card" class="q-mr-xs" label="Market Place" />
+        <q-btn flat dense icon="restaurant" label="Order Food" /> -->
+        <q-btn flat dense icon="logout" :to="{ path: 'login' }" label="Logout" />
+
       </q-toolbar>
     </q-header>
 
