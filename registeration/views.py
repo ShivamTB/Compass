@@ -48,6 +48,19 @@ def add_user_photo(request):
 
 
 @login_required
+def get_user_photos(request):
+    user = request.user
+    photos_path = os.path.join(settings.BASE_DIR,
+                               'static',
+                               'user_photos',
+                               str(user.id),
+                               'event_photos')
+    photos = os.listdir(photos_path)
+    photos = [os.path.join(photos_path, photo) for photo in photos]
+    return JsonResponse({'photos': photos}, status=200)
+
+
+@login_required
 def get_profile_data(request):
     referral_id = request.user.id
     count = Referrals.objects.filter(referrer=request.user).count()
