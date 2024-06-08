@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from fooddelivery.models import Restaurants, Orders, MenuItems
 from django.http import JsonResponse
+from django.contrib.auth.models import User
 # Create your views here.
 
 def get_restaurants(request):
@@ -12,7 +13,7 @@ def get_restaurants(request):
     if cuisine:
         filter['cuisine__icontains'] = cuisine
     
-    restaurants = list(Restaurants.objects.filter(**filter).values('id', 'name'))
+    restaurants = list(Restaurants.objects.filter(**filter).values('id', 'name', 'cuisine', 'image'))
     return JsonResponse({'restaurants': restaurants}, status=200)
 
 
@@ -33,7 +34,7 @@ def get_filter_values(request):
 def get_menu_items(request):
     restaurant = request.GET.get('restaurant_id')
     restaurant = Restaurants.objects.get(id=restaurant)
-    menu_items = list(MenuItems.objects.filter(restaurant=restaurant).values('id', 'name', 'price'))
+    menu_items = list(MenuItems.objects.filter(restaurant=restaurant).values('id', 'name', 'price', 'image', 'description'))
     return JsonResponse({'items': menu_items}, status=200)
 
 
@@ -42,7 +43,7 @@ def create_order(request):
     quantity = request.POST.get('quantity')
     seat = request.POST.get('seat')
     menu_item = MenuItems.objects.get(id=menu_item_id)
-    Orders.objects.create(user=request.user,
+    Orders.objects.create(user=User.objects.all().last(),
                           menu_item=menu_item,
                           quantity=quantity,
                           seat=seat)

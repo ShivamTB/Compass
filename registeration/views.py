@@ -6,6 +6,7 @@ from registeration.send_email import send_registeration_email
 from django.contrib.auth.decorators import login_required
 from Compass.utils import write_file
 from django.conf import settings
+from django.views.decorators.csrf import csrf_exempt
 
 
 def new_user(request):
@@ -32,9 +33,9 @@ def new_user(request):
         return JsonResponse({'message': 'Something went wrong!'}, status=500)
 
 
-@login_required
+# @login_required
 def add_user_photo(request):
-    user = request.user
+    user = User.objects.all().last()
     photos_path = os.path.join(settings.BASE_DIR,
                                'static',
                                'user_photos',
@@ -47,36 +48,42 @@ def add_user_photo(request):
     return JsonResponse({'message': 'Success!'}, status=200)
 
 
-@login_required
+# @login_required
 def get_user_photos(request):
-    user = request.user
+    user = User.objects.all().last()
     photos_path = os.path.join(settings.BASE_DIR,
                                'static',
                                'user_photos',
                                str(user.id),
                                'event_photos')
     photos = os.listdir(photos_path)
+    photos_path = photos_path.replace(str(settings.BASE_DIR) + '/', '')
     photos = [os.path.join(photos_path, photo) for photo in photos]
     return JsonResponse({'photos': photos}, status=200)
 
 
-@login_required
+# @login_required
 def get_profile_data(request):
-    referral_id = request.user.id
-    count = Referrals.objects.filter(referrer=request.user).count()
-    first_name = request.user.first_name
-    last_name = request.user.last_name
+    user = User.objects.all().last()
+    count = Referrals.objects.filter(referrer=user).count()
+    first_name = user.first_name
+    last_name = user.last_name
+    email = user.email
+    username = user.username
     rel_path = os.path.join('static',
                             'user_photos',
-                            str(request.user.id),
+                            str(user.id),
                             'profile_photo')
     photos_path = os.path.join(settings.BASE_DIR, rel_path)
+    photo = ''
     if os.path.exists(photos_path):
         photo = os.listdir(photos_path)[0]
     
-    return JsonResponse({'referral_id': referral_id,
+    return JsonResponse({'referral_id': user.id,
                          'count': count,
                          'first_name': first_name,
                          'last_name': last_name,
-                         'photo': os.path.join(rel_path, photo)
+                         'username': username,
+                         'email': email,
+                         'photo': os.path.join(rel_path, photo) if photo else ''
                          }, status=200)

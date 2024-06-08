@@ -3,13 +3,14 @@ from django.shortcuts import render
 from django.contrib.auth import authenticate, login, logout
 from django.http import JsonResponse
 from django.middleware.csrf import get_token as get_csrf_token
-
+from django.views.decorators.csrf import csrf_exempt
 # Create your views here.
 
 def csrf(request):
     return JsonResponse({'csrfToken': get_csrf_token(request)})
 
 
+@csrf_exempt
 def login_view(request):
     username = request.POST.get('username')
     password = request.POST.get('password')
@@ -18,7 +19,8 @@ def login_view(request):
         login(request, user)
         return JsonResponse({"detail": "Success",
                              "status": 200,
-                             'user': f"{user.first_name} {user.last_name}"},
+                             'user': f"{user.first_name} {user.last_name}",
+                             'user_id': f"{user.id}"},
                             status=200)
     return JsonResponse({"detail": "Invalid credentials",
                          "status": 400},

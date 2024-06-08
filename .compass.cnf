@@ -1,3 +1,4 @@
 [client]
 database = compass
 user = root
+default-character-set = utf8

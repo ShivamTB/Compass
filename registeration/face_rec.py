@@ -20,7 +20,6 @@ def move_pics(user_face_embedding, user_id, file):
                                    'event_photos',
                                    file))
 
-
 for user_id in os.listdir(pro_photos_path):
     profile_pic_path = os.path.join(pro_photos_path,
                                     user_id,
