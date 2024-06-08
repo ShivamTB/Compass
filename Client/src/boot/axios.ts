@@ -24,28 +24,27 @@ const baseURL = process.env.VUE_API_URL ? process.env.VUE_API_URL : 'http://192.
 // "export default () => {}" function below (which runs individually
 // for each client)
 
+axios.defaults.withCredentials = true;
+axios.defaults.baseURL = baseURL;
+
 
 const api = axios.create({
   xsrfCookieName: 'csrftoken',
   xsrfHeaderName: 'X-CSRFTOKEN',
+  withCredentials: true,
   baseURL: baseURL,
-  headers: {
-    // 'Content-Type': 'application/json',
-    // 'Access-Control-Allow-Origin': '*',
-    // 'Access-Control-Allow-Methods': 'GET,PUT,POST,DELETE,PATCH,OPTIONS',
-    // 'Access-Control-Allow-Headers': 'Content-Type, Authorization'
-
-
-  },
 });
 
 
 api.interceptors.request.use(async (req: any) => {
   const { method } = req
 
-  req.withCredentials = true
+  req.credentials = 'include'
   if (method === 'post') {
     const token = await getCSRFToken()
+    req.headers['X-CSRFToken'] = token
+  } else {
+    const token = localStorage.getItem('token')
     req.headers['X-CSRFToken'] = token
   }
   return req

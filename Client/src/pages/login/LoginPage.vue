@@ -69,7 +69,7 @@ const login = async () => {
     const isLoggedIn = await authStore.loginUser(user.value)
     if (isLoggedIn) {
         notifySuccess('Login Successful')
-        router.push({ path: '/' })
+        router.push({ path: '/profile' })
     }
     else {
         notifyError('Login Failed. Please try again.')

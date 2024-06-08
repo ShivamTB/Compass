@@ -6,8 +6,9 @@ export const loginUser = async (form: any) => {
     const formData = formDataGenerator(form)
     return await api.post('/login', formData).then((response) => {
         if (response.status == 200) {
-            const { user } = response.data
-            return user
+            const { user, user_id } = response.data
+            if (user_id) localStorage.setItem('user_id', user_id)
+            return { user, user_id }
         } else {
             return false
         }

@@ -10,7 +10,7 @@ export const useAuthStore = defineStore('users', {
 
     actions: {
         async loginUser(form: any) {
-            const user = await loginUser(form)
+            const user: any = await loginUser(form)
             if (user) {
                 this.userData = user
                 return true
