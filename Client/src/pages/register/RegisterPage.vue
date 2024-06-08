@@ -22,10 +22,12 @@
                                 </div>
                             </div>
                             <q-form ref="form" class="q-gutter-md" @submit="submit">
+                                <q-input v-model="user.username" label="User Name" name="User Name" />
                                 <q-input v-model="user.first_name" label="First Name" name="First Name" />
                                 <q-input v-model="user.last_name" label="Last Name" name="Last Name" />
                                 <q-input v-model="user.email" label="Email" name="Email" />
                                 <q-input v-model="user.password" label="Password" name="password" type="password" />
+                                <q-input v-model="user.referral" label="Referral" name="Referral" />
                                 <div>
                                     <q-btn class="full-width fredoka" color="primary" label="Register" rounded
                                         type="submit"></q-btn>
@@ -46,18 +48,25 @@
 </template>
 
 <script setup>
-import { reactive } from 'vue'
+import { registerUser } from 'src/services/auth.service';
+import { notifySuccess } from 'src/utils/notify';
+import { ref } from 'vue'
 
-const user = reactive({
-    last_name: null,
-    first_name: null,
-    email: null,
-    password: null
+const user = ref({
+    username: 'shafeequeom',
+    last_name: 'shafeeq',
+    first_name: 'OM',
+    email: 'shafeequeom7@gmail.com',
+    password: 'som@123',
+    referral: '11'
 })
 
 // const form = ref({})
 
-const submit = () => {
-    console.log('Submit')
+const submit = async () => {
+    const isRegistered = await registerUser(user.value);
+    if (isRegistered) {
+        notifySuccess('User registered successfully');
+    }
 }
 </script>

@@ -25,8 +25,8 @@
                                 </div>
                             </div>
 
-                            <q-form ref="form" class="q-gutter-md" @submit="submit">
-                                <q-input v-model="user.email" label="Email" name="Email" />
+                            <q-form ref="form" class="q-gutter-md" @submit="login">
+                                <q-input v-model="user.username" label="Username" name="Username" />
 
                                 <q-input v-model="user.password" label="Password" name="password" type="password" />
 
@@ -51,20 +51,31 @@
 </template>
 
 <script setup>
-import { ref, reactive } from 'vue'
+import { notifyError, notifySuccess } from 'src/utils/notify';
+import { ref } from 'vue'
+import { useAuthStore } from '../../stores/authentication.store'
+import { useRouter } from 'vue-router'
 
-const user = reactive({
-    email: null,
+const user = ref({
+    username: null,
     password: null
 })
 
-const form = ref(null)
 
-const submit = async () => {
-    if (form.value.validate()) {
+const router = useRouter()
 
+const login = async () => {
+    const authStore = useAuthStore()
+    const isLoggedIn = await authStore.loginUser(user.value)
+    if (isLoggedIn) {
+        notifySuccess('Login Successful')
+        router.push({ path: '/' })
+    }
+    else {
+        notifyError('Login Failed. Please try again.')
     }
 }
+
 </script>
 
 <style scoped>
