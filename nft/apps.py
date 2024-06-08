@@ -7,6 +7,8 @@ class NftConfig(AppConfig):
     default_auto_field = "django.db.models.BigAutoField"
     name = "nft"
 
+# Youtube guide I used to do this NFT: https://www.youtube.com/watch?v=4A-Ti_sb-Mo"
+
 NFT_URI = "https://thumbor.forbes.com/thumbor/960x0/https%3A%2F%2Fspecials-images.forbesimg.com%2Fimageserve%2F6097d" \
           "7ee81957044af68d9ce%2FSNL%2F960x0.jpg%3Ffit%3Dscale"
 NFT_NAME = "Wario Musk"
