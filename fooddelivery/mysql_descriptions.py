@@ -18,8 +18,8 @@ update fooddelivery_restaurants set description='A casual dining restaurant offe
 update fooddelivery_restaurants set description='A fast-food chain specializing in fried chicken, with a range of sides and meals.' where id=5;
 
 # restaurant images
-update fooddelivery_restaurants set image='static_images/mcdonalds.jpg' where id=1;
-update fooddelivery_restaurants set image='static_images/pizzahut.jpg' where id=2;
-update fooddelivery_restaurants set image='static_images/starbucks.jpg' where id=3;
-update fooddelivery_restaurants set image='static_images/pfchangs.jpg' where id=4;
-update fooddelivery_restaurants set image='static_images/kfc.jpg' where id=5;
+update fooddelivery_restaurants set image='static/images/mcdonalds.jpg' where id=1;
+update fooddelivery_restaurants set image='static/images/pizzahut.jpg' where id=2;
+update fooddelivery_restaurants set image='static/images/starbucks.jpg' where id=3;
+update fooddelivery_restaurants set image='static/images/pfchangs.jpg' where id=4;
+update fooddelivery_restaurants set image='static/images/kfc.jpg' where id=5;

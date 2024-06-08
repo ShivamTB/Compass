@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from django.http import JsonResponse
 from registeration.models import Referrals
 from registeration.send_email import send_registeration_email
+from registeration.face_rec import rec_face
 from django.contrib.auth.decorators import login_required
 from Compass.utils import write_file
 from django.conf import settings
@@ -56,6 +57,9 @@ def get_user_photos(request):
                                'user_photos',
                                str(user.id),
                                'event_photos')
+    if not os.path.exists(photos_path):  # Checking if the directory exists
+        os.makedirs(photos_path)
+    rec_face(user)
     photos = os.listdir(photos_path)
     photos_path = photos_path.replace(str(settings.BASE_DIR) + '/', '')
     photos = [os.path.join(photos_path, photo) for photo in photos]
@@ -78,7 +82,7 @@ def get_profile_data(request):
     photo = ''
     if os.path.exists(photos_path):
         photo = os.listdir(photos_path)[0]
-    
+
     return JsonResponse({'referral_id': user.id,
                          'count': count,
                          'first_name': first_name,

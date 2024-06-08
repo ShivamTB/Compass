@@ -20,9 +20,9 @@ def move_pics(user_face_embedding, user_id, file):
                                    'event_photos',
                                    file))
 
-for user_id in os.listdir(pro_photos_path):
+def rec_face(user):
     profile_pic_path = os.path.join(pro_photos_path,
-                                    user_id,
+                                    str(user.id),
                                     'profile_photo')
     profile_pic = os.listdir(profile_pic_path)[0]
     pro_pic = os.path.join(profile_pic_path, profile_pic)   
@@ -30,4 +30,7 @@ for user_id in os.listdir(pro_photos_path):
     user_face_embedding = face_recognition.face_encodings(user_face)[0]
 
     for file in os.listdir(photos_path):
-        move_pics(user_face_embedding, user_id, file)
+        try:
+            move_pics(user_face_embedding, str(user.id), file)
+        except Exception:
+            print(e)

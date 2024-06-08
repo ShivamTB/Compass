@@ -13,7 +13,11 @@ def get_restaurants(request):
     if cuisine:
         filter['cuisine__icontains'] = cuisine
     
-    restaurants = list(Restaurants.objects.filter(**filter).values('id', 'name', 'cuisine', 'image'))
+    restaurants = list(Restaurants.objects.filter(**filter).values('id',
+                                                                   'name',
+                                                                   'cuisine',
+                                                                   'description',
+                                                                   'image'))
     return JsonResponse({'restaurants': restaurants}, status=200)
 
 
