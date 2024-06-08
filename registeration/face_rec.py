@@ -1,4 +1,5 @@
 import face_recognition
+import shutil
 import os
 
 
@@ -14,11 +15,11 @@ def move_pics(user_face_embedding, user_id, file):
         results = face_recognition.compare_faces([user_face_embedding],
                                                  unknown_face_encoding)
         if results[0]:
-            os.rename(unkown_pic,
-                      os.path.join(pro_photos_path,
-                                   user_id,
-                                   'event_photos',
-                                   file))
+            shutil.copy(unkown_pic,
+                        os.path.join(pro_photos_path,
+                                     user_id,
+                                     'event_photos',
+                                     file))
 
 def rec_face(user):
     profile_pic_path = os.path.join(pro_photos_path,
@@ -32,5 +33,5 @@ def rec_face(user):
     for file in os.listdir(photos_path):
         try:
             move_pics(user_face_embedding, str(user.id), file)
-        except Exception:
+        except Exception as e:
             print(e)

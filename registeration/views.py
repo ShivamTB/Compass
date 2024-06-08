@@ -44,7 +44,7 @@ def add_user_photo(request):
                                'profile_photo')
     uploaded_photo = request.FILES.get('photo')
     photo_name = uploaded_photo.name.split('.')
-    photo_name = "profile_pic." + photo_name[1]
+    photo_name = "profile_pic." + photo_name[-1]
     write_file(uploaded_photo, photos_path, photo_name)
     return JsonResponse({'message': 'Success!'}, status=200)
 
